@@ -32,7 +32,8 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function find_client($client_id, $client_secret = NULL)
 	{
-		$query = DB::select('*')->from($this->_table_name)->where(
+		$query = ORM::factory('Model_OAuth2_Client')
+		    ->where(
 			'client_id', '=', $client_id
 		);
 
@@ -41,9 +42,7 @@ class Kohana_Model_OAuth2_Client
 			$query->where('client_secret', '=', $client_secret);
 		}
 
-		$result = $query->as_object('Model_OAuth2_Client', array(
-			array('loaded' => TRUE, 'saved' => TRUE)
-		))->execute();
+		$result = $query->find_all();
 
 		if (count($result))
 		{

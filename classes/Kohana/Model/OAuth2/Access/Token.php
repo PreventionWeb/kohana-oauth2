@@ -37,7 +37,7 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function find_token($access_token, $client_id = NULL)
 	{
-		$query = DB::select('*')->from($this->_table_name)
+		$query = ORM::factory('OAuth2_Access_Token')
 			->where('access_token', '=', $access_token)
 			->where('expires', '>=', time());
 
@@ -46,9 +46,7 @@ class Kohana_Model_OAuth2_Access_Token
 			$query->where('client_id', '=', $client_id);
 		}
 
-		$result = $query->as_object('Model_OAuth2_Access_Token', array(
-			array('loaded' => TRUE, 'saved' => TRUE)
-		))->execute();
+		$result = $query->find_all();
 
 		if (count($result))
 		{

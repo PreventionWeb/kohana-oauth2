@@ -10,7 +10,7 @@
  * @license    https://github.com/managedit/kohana-oauth2/blob/master/LICENSE.md
  */
 abstract class Kohana_Model_OAuth2
-	extends Model
+	extends ORM
 	implements Interface_Model_OAuth2
 {
 	/**
@@ -43,14 +43,11 @@ abstract class Kohana_Model_OAuth2
 	 */
 	protected $_config = NULL;
 
-	public function __construct($params = array())
+	public function __construct($id = NULL)
 	{
 		$this->_config = Kohana::$config->load('oauth2');
-
-		foreach ($params as $param => $value)
-		{
-			$this->{'_'.$param} = $value;
-		}
+		
+		parent::__construct($id);
 	}
 
 	/**
@@ -124,7 +121,7 @@ abstract class Kohana_Model_OAuth2
 	 *
 	 * @return $this
 	 */
-	public function save()
+	/*public function save()
 	{
 		if ($this->_saved)
 			return $this;
@@ -153,14 +150,14 @@ abstract class Kohana_Model_OAuth2
 		}
 
 		return $this;
-	}
+	}*/
 
 	/**
 	 * Deletes this model
 	 *
 	 * @return $this
 	 */
-	public function delete()
+	/*public function delete()
 	{
 		if ( ! $this->loaded())
 			return TRUE;
@@ -170,5 +167,5 @@ abstract class Kohana_Model_OAuth2
 			->execute();
 
 		return TRUE;
-	}
+	}*/
 }

@@ -43,14 +43,10 @@ class Kohana_Model_OAuth2_Auth_Code
 	 */
 	public static function find_code($code, $client_id = NULL)
 	{
-		$result = DB::select()
-			->from($this->_table_name)
+		$result = ORM::factory('OAuth2_Auth_Code')
 			->where('code', '=', $code)
 			->where('expires', '>=', time())
-			->as_object('Model_OAuth2_Auth_Code', array(
-				array('loaded' => TRUE, 'saved' => TRUE)
-			))
-			->execute();
+			->find_all();
 
 		return ($result->count() > 0)
 			? $result->current()
