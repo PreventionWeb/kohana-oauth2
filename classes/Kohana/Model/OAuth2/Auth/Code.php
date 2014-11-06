@@ -67,17 +67,16 @@ class Kohana_Model_OAuth2_Auth_Code
 		$client_id, $redirect_uri, $user_id = NULL, $scope = NULL
 	)
 	{
-		$code = new Model_OAuth2_Auth_Code(
-			array(
-				'data' => array(
-					'code' => UUID::v4(),
-					'expires' => time() + Model_OAuth2_Auth_Code::$lifetime,
-					'client_id' => $client_id,
-					'user_id' => $user_id,
-					'redirect_uri' => $redirect_uri,
-					'scope' => serialize($scope)
-				)
-			)
+		$code = new self;
+		$code->values(
+		    array(
+			    'code' => UUID::v4(),
+			    'expires' => time() + Model_OAuth2_Auth_Code::$lifetime,
+			    'client_id' => $client_id,
+			    'user_id' => $user_id,
+			    'redirect_uri' => $redirect_uri,
+			    'scope' => serialize($scope)
+		    )
 		);
 
 		$code->save();
@@ -102,7 +101,8 @@ class Kohana_Model_OAuth2_Auth_Code
 	 */
 	public static function deleted_expired_codes()
 	{
-		$rows_deleted = DB::delete($this->_table_name)
+		$instance = new self;
+		$rows_deleted = DB::delete($instance->table_name())
 			->where('expires', '<=', time())
 			->execute();
 
