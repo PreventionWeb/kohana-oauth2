@@ -44,7 +44,7 @@ class Kohana_Model_OAuth2_Auth_Code
 	public static function find_code($code, $client_id = NULL)
 	{
 		$result = DB::select()
-			->from('oauth2_auth_codes')
+			->from($this->_table_name)
 			->where('code', '=', $code)
 			->where('expires', '>=', time())
 			->as_object('Model_OAuth2_Auth_Code', array(
@@ -106,7 +106,7 @@ class Kohana_Model_OAuth2_Auth_Code
 	 */
 	public static function deleted_expired_codes()
 	{
-		$rows_deleted = DB::delete('oauth2_auth_codes')
+		$rows_deleted = DB::delete($this->_table_name)
 			->where('expires', '<=', time())
 			->execute();
 
