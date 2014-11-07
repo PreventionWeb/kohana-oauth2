@@ -71,7 +71,7 @@ class Kohana_Model_OAuth2_Access_Token
 		$client_id, $user_id = NULL, $scope = NULL
 	)
 	{
-		$token = new self;
+		$token = new static;
 		$token->values(
 			array(
 			    'access_token'	 => UUID::v4(),
@@ -96,7 +96,7 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function delete_token($access_token)
 	{
-		return Model_OAuth2_Access_Token::find_token($access_token)->delete();
+		return static::find_token($access_token)->delete();
 	}
 
 	/**
@@ -106,7 +106,7 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function deleted_expired_tokens()
 	{
-		$instance = new self;
+		$instance = new static;
 		$rows_deleted = DB::delete($instance->table_name())
 			->where('expires', '<=', time())
 			->execute();

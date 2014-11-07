@@ -32,7 +32,7 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function find_client($client_id, $client_secret = NULL)
 	{
-		$query = ORM::factory('Model_OAuth2_Client')
+		$query = ORM::factory('OAuth2_Client')
 		    ->where(
 			'client_id', '=', $client_id
 		);
@@ -64,7 +64,7 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function create_client($redirect_uri = NULL, $user_id = NULL)
 	{
-		$client = new self;
+		$client = new Model_OAuth2_Client;
 		$client->values(
 		    array(	
 			'user_id' => $user_id,

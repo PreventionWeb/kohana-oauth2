@@ -71,7 +71,7 @@ class Kohana_Model_OAuth2_Refresh_Token
 		$client_id, $user_id = NULL, $scope = NULL
 	)
 	{
-		$token = new self;
+		$token = new static;
 		$token->values(
 		    array(
 			    'refresh_token' => UUID::v4(),
@@ -106,7 +106,7 @@ class Kohana_Model_OAuth2_Refresh_Token
 	 */
 	public static function deleted_expired_tokens()
 	{
-		$instance = new self;
+		$instance = new static;
 		$rows_deleted = DB::delete($instance->table_name())
 			->where('expires', '<=', time())
 			->execute();

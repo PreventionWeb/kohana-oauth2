@@ -67,7 +67,7 @@ class Kohana_Model_OAuth2_Auth_Code
 		$client_id, $redirect_uri, $user_id = NULL, $scope = NULL
 	)
 	{
-		$code = new self;
+		$code = new static;
 		$code->values(
 		    array(
 			    'code' => UUID::v4(),
@@ -91,7 +91,7 @@ class Kohana_Model_OAuth2_Auth_Code
 	 */
 	public static function delete_code($code)
 	{
-		return Model_OAuth2_Auth_Code::find_code($code)->delete();
+		return static::find_code($code)->delete();
 	}
 
 	/**
@@ -101,7 +101,7 @@ class Kohana_Model_OAuth2_Auth_Code
 	 */
 	public static function deleted_expired_codes()
 	{
-		$instance = new self;
+		$instance = new static;
 		$rows_deleted = DB::delete($instance->table_name())
 			->where('expires', '<=', time())
 			->execute();
