@@ -37,7 +37,7 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function find_token($access_token, $client_id = NULL)
 	{
-		$query = db::select('*')->from('oauth2_access_tokens')
+		$query = ORM::factory('OAuth2_Access_Token')
 			->where('access_token', '=', $access_token)
 			->where('expires', '>=', time());
 
@@ -46,9 +46,7 @@ class Kohana_Model_OAuth2_Access_Token
 			$query->where('client_id', '=', $client_id);
 		}
 
-		$result = $query->as_object('Model_OAuth2_Access_Token', array(
-			array('loaded' => TRUE, 'saved' => TRUE)
-		))->execute();
+		$result = $query->find_all();
 
 		if (count($result))
 		{
@@ -73,17 +71,16 @@ class Kohana_Model_OAuth2_Access_Token
 		$client_id, $user_id = NULL, $scope = NULL
 	)
 	{
-		$token = new Model_OAuth2_Access_Token(
+		$token = new static;
+		$token->values(
 			array(
-				'data' => array(
-					'access_token' => UUID::v4(),
-					'expires' => time() + Model_OAuth2_Access_Token::$lifetime,
-					'client_id' => $client_id,
-					'user_id' => $user_id,
-					'scope' => serialize($scope)
-				)
+			    'access_token'	 => UUID::v4(),
+			    'expires'	 => time() + Model_OAuth2_Access_Token::$lifetime,
+			    'client_id'	 => $client_id,
+			    'user_id'	 => $user_id,
+			    'scope'		 => serialize($scope)
 			)
-		);
+		    );
 
 		$token->save();
 
@@ -99,7 +96,7 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function delete_token($access_token)
 	{
-		return Model_OAuth2_Access_Token::find_token($access_token)->delete();
+		return static::find_token($access_token)->delete();
 	}
 
 	/**
@@ -109,8 +106,8 @@ class Kohana_Model_OAuth2_Access_Token
 	 */
 	public static function deleted_expired_tokens()
 	{
-
-		$rows_deleted = DB::delete('oauth2_access_tokens')
+		$instance = new static;
+		$rows_deleted = DB::delete($instance->table_name())
 			->where('expires', '<=', time())
 			->execute();
 

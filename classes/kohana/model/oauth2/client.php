@@ -32,7 +32,8 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function find_client($client_id, $client_secret = NULL)
 	{
-		$query = db::select('*')->from('oauth2_clients')->where(
+		$query = ORM::factory('OAuth2_Client')
+		    ->where(
 			'client_id', '=', $client_id
 		);
 
@@ -41,9 +42,7 @@ class Kohana_Model_OAuth2_Client
 			$query->where('client_secret', '=', $client_secret);
 		}
 
-		$result = $query->as_object('Model_OAuth2_Client', array(
-			array('loaded' => TRUE, 'saved' => TRUE)
-		))->execute();
+		$result = $query->find_all();
 
 		if (count($result))
 		{
@@ -51,7 +50,7 @@ class Kohana_Model_OAuth2_Client
 		}
 		else
 		{
-			return new Model_OAuth2_Client;
+			return new static;
 		}
 	}
 
@@ -65,15 +64,14 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function create_client($redirect_uri = NULL, $user_id = NULL)
 	{
-		$client = new Model_OAuth2_Client(
-			array(
-				'data' => array(
-					'user_id' => $user_id,
-					'client_id' => UUID::v4(),
-					'client_secret' => UUID::v4(),
-					'redirect_uri' => $redirect_uri,
-				)
-			)
+		$client = new static;
+		$client->values(
+		    array(	
+			'user_id' => $user_id,
+			'client_id' => UUID::v4(),
+			'client_secret' => UUID::v4(),
+			'redirect_uri' => $redirect_uri,
+		    )
 		);
 
 		$client->save();
@@ -90,7 +88,7 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function delete_client($client_id)
 	{
-		Model_OAuth2_Client::find_client($client_id)->delete();
+		static::find_client($client_id)->delete();
 	}
 
 	/**
