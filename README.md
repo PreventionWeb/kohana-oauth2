@@ -1,8 +1,9 @@
 # Kohana OAuth2 Module Readme
 
-This is very much a work in progress.. Comments welcome :)
+Forked from Qbqllinternet to have the 3.3 support. Originaly forked from https://github.com/managedit/kohana-oauth2.
 
-(Crappy and outdated) Docs are provided as part of the module, to view them, ensure you have the userguide module installed.
+This version tries to go further finalize some remaining unfinished work.
 
-Example consumer: https://github.com/managedit/kohana-oauth2-example-consumer
-Example provider: https://github.com/managedit/kohana-oauth2-example-provider
+# Updates:
+- Models are extending ORM to use standard Kohana processing of data from database tables
+
