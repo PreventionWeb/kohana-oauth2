@@ -96,7 +96,7 @@ class Kohana_Model_OAuth2_Refresh_Token
 	 */
 	public static function delete_token($refresh_token)
 	{
-		Model_OAuth2_Refresh_Token::find_token($refresh_token)->delete();
+		static::find_token($refresh_token)->delete();
 	}
 
 	/**

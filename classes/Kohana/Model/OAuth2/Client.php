@@ -50,7 +50,7 @@ class Kohana_Model_OAuth2_Client
 		}
 		else
 		{
-			return new Model_OAuth2_Client;
+			return new static;
 		}
 	}
 
@@ -64,7 +64,7 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function create_client($redirect_uri = NULL, $user_id = NULL)
 	{
-		$client = new Model_OAuth2_Client;
+		$client = new static;
 		$client->values(
 		    array(	
 			'user_id' => $user_id,
@@ -88,7 +88,7 @@ class Kohana_Model_OAuth2_Client
 	 */
 	public static function delete_client($client_id)
 	{
-		Model_OAuth2_Client::find_client($client_id)->delete();
+		static::find_client($client_id)->delete();
 	}
 
 	/**
