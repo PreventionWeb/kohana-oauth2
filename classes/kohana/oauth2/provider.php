@@ -56,7 +56,8 @@ class Kohana_OAuth2_Provider {
 		}
 	}
 	/**
-	 *
+	 * Validate the authorization parameters from the client query
+	 * @todo Finalize the processing of the state parameter as it is an important security element
 	 * @return array
 	 */
 	public function validate_authorize_params()
@@ -65,11 +66,23 @@ class Kohana_OAuth2_Provider {
 
 		$validation = Validation::factory($request_params)
 			->rule('client_id',     'not_empty')
-			->rule('client_id',     'uuid::valid')
+			//->rule('client_id',     'uuid::valid') this is useless, we do not care if the client id has been generated using the uuid library...
 			->rule('response_type', 'not_empty')
 			->rule('response_type', 'in_array',  array(':value', $this->_config['supported_response_types']))
-			->rule('scope',         'in_array',  array(':value', $this->_config['scopes']))
 			->rule('redirect_uri',  'url');
+		
+		// HJ: fix the scope because scope is not mandatory in the OAuth2 specifications https://tools.ietf.org/html/rfc6749#section-4.1.1
+		if(isset($request_params['scope']))
+		{
+		    $validation->rule('scope', 'in_array',  array(':value', $this->_config['scopes']));
+		}
+		
+		// HJ: add the state as it is not handled and is important for security
+		if(isset($request_params['state']))
+		{
+		    // TODO : state token validation to avoid replay attacks or man in the middle
+		     //$validation->rule('scope', OAuth2_Provider_Authorization::);
+		}
 
 		if ( ! $validation->check())
 			throw new OAuth2_Exception_InvalidRequest("Invalid Request: ".Debug::vars($validation->errors()));
