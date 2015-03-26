@@ -12,7 +12,7 @@
  * @copyright  (c) 2011 Managed I.T.
  * @license    https://github.com/managedit/kohana-oauth2/blob/master/LICENSE.md
  */
-class Kohana_OAuth2_Provider_TokenType_Mac extends OAuth2_Provider_TokenType {
+abstract class Kohana_OAuth2_Provider_TokenType_Mac extends OAuth2_Provider_TokenType {
 
 	const TOKEN_TYPE = 'mac';
 
@@ -70,5 +70,10 @@ class Kohana_OAuth2_Provider_TokenType_Mac extends OAuth2_Provider_TokenType {
 	public function get_user_id()
 	{
 		throw new OAuth2_Exception_InvalidClient('The \'mac\' token type has not been implemented');
+	}
+
+	public function validate()
+	{
+		return array();
 	}
 }
